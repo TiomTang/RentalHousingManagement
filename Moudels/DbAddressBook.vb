@@ -3,7 +3,7 @@
 Public Class DbAddressBook
 
     '继承自XML序列化处理类
-    Inherits SerializableData
+    'Inherits SerializableData
 
     '声明特性，忽略该字段，不被序列化，因不支持类型的序列化会导致出错
     <System.Xml.Serialization.XmlIgnore> Public Property Items As New ArrayList

@@ -3,21 +3,21 @@ Imports System.Xml.Serialization
 Public Class SerializableData
 
 
-    Public Sub Save(ByVal filename As String)
+    Public Shared Sub Save(ByVal filename As String, ByVal newType As Type)
         Dim tempFileName As String
         tempFileName = filename & ".tmp"
 
         Dim tempFileInfo As New FileInfo(tempFileName)
         If tempFileInfo.Exists = True Then tempFileInfo.Delete()
         Dim stream As FileStream = New FileStream(tempFileName, FileMode.Create)
-        save(stream)
+        save(stream, newType)
         stream.Close()
         tempFileInfo.CopyTo(filename, True)
         tempFileInfo.Delete()
     End Sub
-    Public Sub save(ByVal stream As Stream)
-        Dim serializer As New XmlSerializer(Me.GetType)
-        serializer.Serialize(stream, Me)
+    Public Shared Sub save(ByVal stream As Stream, ByVal newType As Type)
+        Dim serializer As New XmlSerializer(newType)
+        serializer.Serialize(stream, newType)
     End Sub
 
     Public Shared Function Load(ByVal filename As String, ByVal newType As Type) As Object

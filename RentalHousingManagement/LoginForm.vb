@@ -1,4 +1,7 @@
 ﻿
+Imports DAL
+Imports Moudels
+Imports MySql.Data.MySqlClient
 Public Class LoginForm
 
     Private AddressBook As DbAddressBook
@@ -52,15 +55,15 @@ Public Class LoginForm
 
     Private Sub OutPutList(ByVal book As DbAddressBook)
 
-        ListView1.Items.Clear()
+        'ListView1.Items.Clear()
 
-        Dim i As Integer = 1
-        For Each x As DBAddress In book.Items
+        'Dim i As Integer = 1
+        'For Each x As DBAddress In book.Items
 
-            ListView1.Items.Add(x.ToListViewItem(i))
-            i += 1
-        Next
-        ListView1.Items(currentIndex - 1).Selected = True
+        '    ListView1.Items.Add(x.ToListViewItem(i))
+        '    i += 1
+        'Next
+        'ListView1.Items(currentIndex - 1).Selected = True
 
 
     End Sub
@@ -90,7 +93,7 @@ Public Class LoginForm
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If CheckTextIsEmpty() Then
             InputAddress(CurrentAddress)
-            AddressBook.Save(DataFilename)
+            SerializableData.Save(DataFilename, GetType(DbAddressBook))
             currentIndex = _currentIndex
         Else
             MessageBox.Show("保存失败，请检查是否全部填写。")
@@ -107,8 +110,9 @@ Public Class LoginForm
     End Sub
 
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
-        'DbConn.serverAddress = CurrentAddress
 
+        sqlhelp = New SQLHelper(CurrentAddress)
+        Dim rs As MySqlDataReader = sqlhelp.GetReader("select * from 水电表1")
         'If DbConn.CheckDataBaseState Then
         '    myFormNav.ToNextForm(Me, Form1)
         'Else
