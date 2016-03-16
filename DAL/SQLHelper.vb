@@ -1,5 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports Moudels
+Imports CommonClass
 
 Public Class SQLHelper
     Private conn As MySqlConnection
@@ -14,13 +15,14 @@ Public Class SQLHelper
         Try
             conn.Open()
             resulf = cmd.ExecuteNonQuery()
-
+            Return resulf
         Catch ex As Exception
-
+            ErrorLogService.SaveErrorMessage(ex.Message)
+            Return resulf
         Finally
             conn.Close()
         End Try
-        Return resulf
+
 
     End Function
 
@@ -30,7 +32,7 @@ Public Class SQLHelper
             conn.Open()
             Return cmd.ExecuteReader
         Catch ex As Exception
-
+            ErrorLogService.SaveErrorMessage(ex.Message)
         Finally
 
         End Try
@@ -44,27 +46,30 @@ Public Class SQLHelper
         Try
             conn.Open()
             myobj = cmd.ExecuteScalar
-
+            Return myobj
         Catch ex As Exception
-
+            ErrorLogService.SaveErrorMessage(ex.Message)
+            Return myobj
         Finally
             conn.Close()
 
         End Try
 
-        Return myobj
+
 
     End Function
 
     Public Function GetDataTable(ByVal sqlString As String) As DataTable
         Dim ada As New MySqlDataAdapter(sqlString, conn)
+        Dim newDT As New DataTable
         Try
             conn.Open()
-            Dim newDT As New DataTable
+
             ada.Fill(newDT)
             Return newDT
         Catch ex As Exception
-
+            ErrorLogService.SaveErrorMessage(ex.Message)
+            Return newDT
         Finally
             conn.Close()
         End Try
