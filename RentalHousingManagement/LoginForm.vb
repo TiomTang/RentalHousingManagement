@@ -39,20 +39,20 @@ Public Class LoginForm
 
     '将文本内容输入空的DBAddress对象
     Private Sub InputAddress(ByVal emptyDbAddress As DBAddress)
-        emptyDbAddress.Account = txtAccount.Text
-        emptyDbAddress.DataBaseName = txtDbName.Text
-        emptyDbAddress.PassWord = txtPassWord.Text
-        emptyDbAddress.Port = txtPort.Text
-        emptyDbAddress.ServerAddress = txtServerAddress.Text
+        emptyDbAddress.Account = StringSecurity.DESEncrypt(txtAccount.Text)
+        emptyDbAddress.DataBaseName = StringSecurity.DESEncrypt(txtDbName.Text)
+        emptyDbAddress.PassWord = StringSecurity.DESEncrypt(txtPassWord.Text)
+        emptyDbAddress.Port = StringSecurity.DESEncrypt(txtPort.Text)
+        emptyDbAddress.ServerAddress = StringSecurity.DESEncrypt(txtServerAddress.Text)
     End Sub
 
     '从DbAddress中输出到文本框
     Private Sub OutPutText(ByVal emptyDbAddress As DBAddress)
-        txtAccount.Text = emptyDbAddress.Account
-        txtDbName.Text = emptyDbAddress.DataBaseName
-        txtPassWord.Text = emptyDbAddress.PassWord
-        txtPort.Text = emptyDbAddress.Port
-        txtServerAddress.Text = emptyDbAddress.ServerAddress
+        txtAccount.Text = StringSecurity.DESDecrypt(emptyDbAddress.Account)
+        txtDbName.Text = StringSecurity.DESDecrypt(emptyDbAddress.DataBaseName)
+        txtPassWord.Text = StringSecurity.DESDecrypt(emptyDbAddress.PassWord)
+        txtPort.Text = StringSecurity.DESDecrypt(emptyDbAddress.Port)
+        txtServerAddress.Text = StringSecurity.DESDecrypt(emptyDbAddress.ServerAddress)
     End Sub
 
     Private Sub OutPutList(ByVal book As DbAddressBook)
@@ -62,7 +62,7 @@ Public Class LoginForm
         Dim i As Integer = 1
         For Each x As DBAddress In book.Items
 
-            ListView1.Items.Add(New ListViewItem({i, x.ServerAddress, x.Port, x.DataBaseName, x.Account, x.PassWord}))
+            ListView1.Items.Add(New ListViewItem({i, StringSecurity.DESDecrypt(x.ServerAddress), StringSecurity.DESDecrypt(x.Port), StringSecurity.DESDecrypt(x.DataBaseName), StringSecurity.DESDecrypt(x.Account), StringSecurity.DESDecrypt(x.PassWord)}))
             i += 1
         Next
         ListView1.Items(currentIndex - 1).Selected = True
